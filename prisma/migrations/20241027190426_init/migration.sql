@@ -3,7 +3,7 @@ CREATE TYPE "Role" AS ENUM ('ADMIN', 'USER');
 
 -- CreateTable
 CREATE TABLE "users" (
-    "id" SERIAL NOT NULL,
+    "id" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "password" TEXT NOT NULL,
     "image_url" TEXT NOT NULL DEFAULT '',
@@ -18,7 +18,7 @@ CREATE TABLE "users" (
 CREATE TABLE "tokens" (
     "token" TEXT NOT NULL,
     "exp" TIMESTAMP(3) NOT NULL,
-    "userId" INTEGER NOT NULL
+    "userId" TEXT NOT NULL
 );
 
 -- CreateIndex
