@@ -1,6 +1,8 @@
 import { ClassSerializerInterceptor, Controller, Delete, Get, Param, UseInterceptors } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserResponse } from './responses';
+import { CurrentUser } from '@common/decorators';
+import { IJwtPayload } from '@auth/interfaces';
 
 @Controller('user')
 export class UserController {
@@ -15,7 +17,7 @@ export class UserController {
 
     @UseInterceptors(ClassSerializerInterceptor)
     @Delete(':id')
-    async deleteUser(@Param('id') id: string) {
-        return this.userService.delete(id);
+    async deleteUser(@Param('id') id: string, @CurrentUser() user: IJwtPayload) {
+        return this.userService.delete(id, user);
     }
 }
