@@ -1,9 +1,10 @@
-import { ClassSerializerInterceptor, Controller, Delete, Get, Param, UseInterceptors } from '@nestjs/common';
+import { Body, ClassSerializerInterceptor, Controller, Delete, Get, Param, Put, UseInterceptors } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserResponse } from './responses';
 import { CurrentUser } from '@common/decorators';
 import { IJwtPayload } from '@auth/interfaces';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { User } from '@prisma/client';
 
 @Controller('user')
 export class UserController {
@@ -42,5 +43,17 @@ export class UserController {
     })
     async deleteUser(@Param('id') id: string, @CurrentUser() user: IJwtPayload) {
         return this.userService.delete(id, user);
+    }
+
+    @Get()
+    me(@CurrentUser() user: IJwtPayload) {
+        return user;
+    }
+
+    @UseInterceptors(ClassSerializerInterceptor)
+    @Put()
+    async updateUser(@Body() body: Partial<User>) {
+        const user = await this.userService.create(body);
+        return new UserResponse(user);
     }
 }
