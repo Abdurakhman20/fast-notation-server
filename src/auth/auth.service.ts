@@ -32,13 +32,22 @@ export class AuthService {
     }
 
     async register(dto: RegisterDto) {
-        const user: User = await this.userService.findOne(dto.email).catch((err) => {
+        const userByEmail: User = await this.userService.findOne(dto.email).catch((err) => {
             this.logger.error(err);
             return null;
         });
-        if (user) {
+        const userByUsername: User = await this.userService.findOneByUsername(dto.username).catch((err) => {
+            this.logger.error(err);
+            return null;
+        });
+
+        if (userByEmail) {
             throw new ConflictException('Пользователь с таким Email уже зарегистрирован');
         }
+        if (userByUsername) {
+            throw new ConflictException('Пользователь с таким именем пользователя (username) уже зарегистрирован');
+        }
+
         return this.userService.create(dto).catch((err) => {
             this.logger.error(err);
             return null;

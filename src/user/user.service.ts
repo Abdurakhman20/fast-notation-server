@@ -28,6 +28,9 @@ export class UserService {
             },
             create: {
                 email: user.email,
+                firstname: user.firstname,
+                lastname: user.lastname,
+                username: user.username,
                 password: hashedPassword,
                 roles: ['USER'],
             },
@@ -57,6 +60,19 @@ export class UserService {
         }
         return cachedUser;
     }
+
+    async findOneByUsername(username: string) {
+        const user = await this.prismaService.user.findFirst({
+            where: { username },
+        });
+
+        if (!user) {
+            return null;
+        }
+
+        return user;
+    }
+
     async delete(id: string, user: IJwtPayload) {
         if (user.id !== id && !user.roles.includes(Role.ADMIN)) {
             throw new ForbiddenException();

@@ -7,6 +7,12 @@ export class UserResponse implements User {
     id: string;
     @ApiProperty()
     email: string;
+    @ApiProperty()
+    firstname: string;
+    @ApiProperty()
+    lastname: string;
+    @ApiProperty()
+    username: string;
     @Exclude()
     password: string;
     @ApiProperty()
